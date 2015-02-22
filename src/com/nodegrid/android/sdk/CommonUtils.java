@@ -6,5 +6,5 @@ package com.nodegrid.android.sdk;
  */
 public class CommonUtils {
 
-    public static final String NODEGRID_SERVER_URL = "";
+    public static final String NODEGRID_SERVER_URL = "http://localhost:3000";
 }

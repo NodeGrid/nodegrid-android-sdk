@@ -71,10 +71,10 @@ public class ApiConnector {
 
             HttpClient httpclient = new DefaultHttpClient();
             Log.d("ApiConnector:sendHttpGetTask / Req Url : ", getRequestUrl);
-            HttpGet request = new HttpGet(getRequestUrl);
+            HttpGet getRequest = new HttpGet(getRequestUrl);
             ResponseHandler<String> handler = new BasicResponseHandler();
             try {
-                responseResult = httpclient.execute(request, handler);
+                responseResult = httpclient.execute(getRequest, handler);
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -139,12 +139,12 @@ public class ApiConnector {
 
             try {
                 Log.d("ApiConnector:SendHttpJSONPostTask / Req Url : ", postRequestUrl);
-                HttpPost post = new HttpPost(postRequestUrl);
+                HttpPost postRequest = new HttpPost(postRequestUrl);
                 Log.d("ApiConnector:SendHttpJSONPostTask / Req Params : ", reqParams.toString());
                 StringEntity se = new StringEntity(reqParams.toString());
                 se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                post.setEntity(se);
-                response = client.execute(post);
+                postRequest.setEntity(se);
+                response = client.execute(postRequest);
 
                 if(response != null) {
                     StatusLine statusLine = response.getStatusLine();
