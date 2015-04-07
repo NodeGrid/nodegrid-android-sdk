@@ -23,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -32,9 +34,9 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApiConnector {
 
-    private String getAuthToken;
     private String getRequestUrl;
     private String postRequestUrl;
+    private Map<String, String> getAdditionalHeaders;
     private JSONObject reqParams;
     private String httpCommonResponse  = "NULL";
 
@@ -43,11 +45,11 @@ public class ApiConnector {
      * @param requestUrl
      * @return String object (returns a json string)
      */
-    protected String sendHttpGet(String requestUrl, String authToken) {
+    protected String sendHttpGet(String requestUrl, Map<String, String> additionalHeaders) {
 
         Log.d("ApiConnector", "ApiConnector:sendHttpGet");
         this.getRequestUrl = requestUrl;
-        this.getAuthToken = authToken;
+        this.getAdditionalHeaders = additionalHeaders;
 
         try {
             sendHttpGetTask sendHttpGetTask = new sendHttpGetTask();
@@ -75,7 +77,14 @@ public class ApiConnector {
             HttpClient httpclient = new DefaultHttpClient();
             Log.d("ApiConnector:sendHttpGetTask / Req Url : ", getRequestUrl);
             HttpGet request = new HttpGet(getRequestUrl);
-            request.setHeader("Authorization", getAuthToken);
+
+            if (getAdditionalHeaders != null) {
+                Set<String> headerKeys = getAdditionalHeaders.keySet();
+                for (String key: headerKeys) {
+                    request.setHeader(key, getAdditionalHeaders.get(key));
+                }
+            }
+
             ResponseHandler<String> handler = new BasicResponseHandler();
             try {
                 responseResult = httpclient.execute(request, handler);
@@ -95,11 +104,11 @@ public class ApiConnector {
      * @param url
      * @param reqParams
      */
-    protected String sendHttpJsonPostReq(String url, JSONObject reqParams, String authToken) {
+    protected String sendHttpJsonPostReq(String url, Map<String, String> additionalHeader, JSONObject reqParams) {
         Log.d("ApiConnector", "ApiConnector:sendHttpJsonPostReq");
         this.postRequestUrl = url;
+        this.getAdditionalHeaders = additionalHeader;
         this.reqParams = reqParams;
-        this.getAuthToken = authToken;
 
         try {
             SendHttpJsonPostTask sendHttpJsonPostTask = new SendHttpJsonPostTask();
@@ -149,7 +158,14 @@ public class ApiConnector {
                 StringEntity se = new StringEntity(reqParams.toString());
                 se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
                 post.setEntity(se);
-                post.setHeader("Authorization", getAuthToken);
+
+                if (getAdditionalHeaders != null) {
+                    Set<String> headerKeys = getAdditionalHeaders.keySet();
+                    for (String key: headerKeys) {
+                        post.setHeader(key, getAdditionalHeaders.get(key));
+                    }
+                }
+
                 response = client.execute(post);
 
                 if(response != null) {
