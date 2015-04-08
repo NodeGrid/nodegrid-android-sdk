@@ -5,5 +5,5 @@ package com.nodegrid.android.sdk.services.connections;
  *
  * @author Kavimal Wijewardana <kavi707@gmail.com>
  */
-public class ApiCalls extends ApiConnector{
+public class SystemApiCalls extends ApiConnector{
 }
