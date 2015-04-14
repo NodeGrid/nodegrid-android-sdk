@@ -2,16 +2,41 @@ package com.nodegrid.android.app;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import com.nodegrid.android.sdk.services.connections.SystemApiCalls;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private Button checkSystemStatusBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setUpView();
+    }
+
+    private void setUpView() {
+        checkSystemStatusBtn = (Button) findViewById(R.id.systemCheckBtn);
+
+        checkSystemStatusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SystemApiCalls systemApiCalls = new SystemApiCalls();
+                String response = "Null";
+                if (systemApiCalls.checkSystemStatus() != null){
+                    response = systemApiCalls.checkSystemStatus();
+                }
+                Log.d("TAG/System Status: ", response);
+            }
+        });
     }
 
     @Override

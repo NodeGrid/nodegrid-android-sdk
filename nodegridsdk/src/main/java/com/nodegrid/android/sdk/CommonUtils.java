@@ -6,5 +6,5 @@ package com.nodegrid.android.sdk;
  * @author Kavimal Wijewardana <kavi707@gmail.com>
  */
 public class CommonUtils {
-    public static final String NODEGRID_SERVER_URL = "";
+    public static final String NODEGRID_SERVER_URL = "http://192.168.1.4:3000";
 }

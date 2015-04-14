@@ -2,5 +2,8 @@
     <string name="app_name">NodeGridSampleApp</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="main_title">NodeGrid SDK Sample</string>
     <string name="action_settings">Settings</string>
+    <string name="system_calls_text">System Calls</string>
+    <string name="status_check_text">Check NodeGrid Status</string>
 </resources>
