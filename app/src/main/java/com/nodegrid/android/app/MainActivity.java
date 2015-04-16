@@ -14,6 +14,11 @@ import com.nodegrid.android.sdk.services.connections.SystemApiCalls;
 public class MainActivity extends ActionBarActivity {
 
     private Button checkSystemStatusBtn;
+    private Button createSystemUserBtn;
+    private Button getSystemUserBtn;
+    private Button deleteSystemUserBtn;
+
+    private SystemApiCalls systemApiCalls = new SystemApiCalls();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +30,47 @@ public class MainActivity extends ActionBarActivity {
 
     private void setUpView() {
         checkSystemStatusBtn = (Button) findViewById(R.id.systemCheckBtn);
+        createSystemUserBtn = (Button) findViewById(R.id.systemUserCreateBtn);
+        getSystemUserBtn = (Button) findViewById(R.id.systemUserGetBtn);
+        deleteSystemUserBtn = (Button) findViewById(R.id.systemUserDeleteBtn);
 
         checkSystemStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SystemApiCalls systemApiCalls = new SystemApiCalls();
                 String response = "Null";
                 if (systemApiCalls.checkSystemStatus() != null){
                     response = systemApiCalls.checkSystemStatus();
                 }
                 Log.d("TAG/System Status: ", response);
+            }
+        });
+
+        createSystemUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String response = "Null";
+            }
+        });
+
+        getSystemUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String response = "Null";
+                if (systemApiCalls.searchUserFromUsername("john") != null) {
+                    response = systemApiCalls.searchUserFromUsername("john");
+                }
+                Log.d("TAG/User: ", response);
+            }
+        });
+
+        deleteSystemUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String response = "Null";
+                if (systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4") != null) {
+                    response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
+                }
+                Log.d("TAG/User delete: ", response);
             }
         });
     }

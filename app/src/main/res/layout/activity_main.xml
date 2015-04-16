@@ -36,4 +36,37 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_new_user_title"
+        android:id="@+id/systemUserCreateBtn"
+        android:layout_below="@+id/systemCheckBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/systemCheckBtn"
+        android:layout_alignEnd="@+id/systemCheckBtn" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get User"
+        android:id="@+id/systemUserGetBtn"
+        android:layout_below="@+id/systemUserCreateBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/systemUserCreateBtn"
+        android:layout_alignEnd="@+id/systemUserCreateBtn" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete User"
+        android:id="@+id/systemUserDeleteBtn"
+        android:layout_below="@+id/systemUserGetBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/systemUserGetBtn"
+        android:layout_alignEnd="@+id/systemUserGetBtn" />
+
 </RelativeLayout>
