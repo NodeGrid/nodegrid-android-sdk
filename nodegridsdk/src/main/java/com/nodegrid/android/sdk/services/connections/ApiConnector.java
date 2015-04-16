@@ -3,14 +3,19 @@ package com.nodegrid.android.sdk.services.connections;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.nodegrid.android.sdk.CommonUtils;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -34,26 +39,28 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApiConnector {
 
-    private String getRequestUrl;
+    private String requestUrl;
+    private String requestMethod;
     private String postRequestUrl;
     private Map<String, String> getAdditionalHeaders;
     private JSONObject reqParams;
     private String httpCommonResponse  = "NULL";
 
     /**
-     * method for sending http get requests to api
+     * method for sending http get, put or delete requests to api
      * @param requestUrl
      * @return String object (returns a json string)
      */
-    protected String sendHttpGet(String requestUrl, Map<String, String> additionalHeaders) {
+    protected String sendHttpRequest(String requestUrl, String requestMethod, Map<String, String> additionalHeaders) {
 
-        Log.d("ApiConnector", "ApiConnector:sendHttpGet");
-        this.getRequestUrl = requestUrl;
+        Log.d("ApiConnector", "ApiConnector:sendHttpRequest");
+        this.requestUrl = requestUrl;
+        this.requestMethod = requestMethod;
         this.getAdditionalHeaders = additionalHeaders;
 
         try {
-            sendHttpGetTask sendHttpGetTask = new sendHttpGetTask();
-            httpCommonResponse = sendHttpGetTask.execute().get();
+            sendHttpRequestTask sendHttpRequestTask = new sendHttpRequestTask();
+            httpCommonResponse = sendHttpRequestTask.execute().get();
         }  catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -64,9 +71,9 @@ public class ApiConnector {
     }
 
     /**
-     * Background Task for send HTTP GET
+     * Background Task for send HTTP GET, PUT, or DELETE Request
      */
-    private class sendHttpGetTask extends AsyncTask<Void, Void, String> {
+    private class sendHttpRequestTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
@@ -75,8 +82,17 @@ public class ApiConnector {
             String responseResult = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            Log.d("ApiConnector:sendHttpGetTask / Req Url : ", getRequestUrl);
-            HttpGet request = new HttpGet(getRequestUrl);
+            Log.d("ApiConnector", "ApiConnector:sendHttpGetTask / Req Url : " + requestUrl);
+
+            HttpRequestBase request;
+
+            if (requestMethod.equals(CommonUtils.HTTP_DELETE)) {
+                request = new HttpDelete(requestUrl);
+            } else if (requestMethod.equals(CommonUtils.HTTP_PUT)) {
+                request = new HttpPut(requestUrl);
+            } else {
+                request = new HttpGet(requestUrl);
+            }
 
             if (getAdditionalHeaders != null) {
                 Set<String> headerKeys = getAdditionalHeaders.keySet();
@@ -152,9 +168,9 @@ public class ApiConnector {
             HttpResponse response;
 
             try {
-                Log.d("ApiConnector:SendHttpJSONPostTask / Req Url : ", postRequestUrl);
+                Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Req Url : " + postRequestUrl);
                 HttpPost post = new HttpPost(postRequestUrl);
-                Log.d("ApiConnector:SendHttpJSONPostTask / Req Params : ", reqParams.toString());
+                Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Req Params : " + reqParams.toString());
                 StringEntity se = new StringEntity(reqParams.toString());
                 se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
                 post.setEntity(se);
@@ -184,18 +200,18 @@ public class ApiConnector {
                         in.close();
                         String result = builder.toString();
                         responseResult = result;
-                        Log.d("ApiConnector:SendHttpJSONPostTask / Status", "Success Response : " + result);
+                        Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Status: Success Response : " + result);
                     } else {
-                        Log.d("ApiConnector:SendHttpJSONPostTask / Error status code", String.valueOf(statusCode));
+                        Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Error status code: " + String.valueOf(statusCode));
                         responseResult = "error";
                     }
                 } else {
-                    Log.d("ApiConnector:SendHttpJSONPostTask / Error", "null response after sending http req");
+                    Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Error: null response after sending http req");
                     responseResult = "error";
                 }
 
             } catch (Exception ex) {
-                Log.d("ApiConnector:SendHttpJSONPostTask / Exception", ex.toString());
+                Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Exception: " + ex.toString());
             }
 
             return responseResult;
