@@ -7,4 +7,5 @@
     <string name="system_calls_text">System Calls</string>
     <string name="status_check_text">Check NodeGrid Status</string>
     <string name="create_new_user_title">Create New User</string>
+    <string name="generate_token_title">Generate Token</string>
 </resources>

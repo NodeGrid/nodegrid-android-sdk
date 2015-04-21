@@ -8,7 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.nodegrid.android.sdk.services.connections.OauthApiCalls;
 import com.nodegrid.android.sdk.services.connections.SystemApiCalls;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -18,7 +22,10 @@ public class MainActivity extends ActionBarActivity {
     private Button getSystemUserBtn;
     private Button deleteSystemUserBtn;
 
+    private Button generateTokenBtn;
+
     private SystemApiCalls systemApiCalls = new SystemApiCalls();
+    private OauthApiCalls oauthApiCalls = new OauthApiCalls();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,8 @@ public class MainActivity extends ActionBarActivity {
         createSystemUserBtn = (Button) findViewById(R.id.systemUserCreateBtn);
         getSystemUserBtn = (Button) findViewById(R.id.systemUserGetBtn);
         deleteSystemUserBtn = (Button) findViewById(R.id.systemUserDeleteBtn);
+
+        generateTokenBtn = (Button) findViewById(R.id.generateTokenBtn);
 
         checkSystemStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +78,24 @@ public class MainActivity extends ActionBarActivity {
                 String response = "Null";
                 if (systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4") != null) {
                     response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
+                }
+                Log.d("TAG/User delete: ", response);
+            }
+        });
+
+        generateTokenBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String response = "Null";
+                JSONObject authJsonParams = new JSONObject();
+                try {
+                    authJsonParams.put("username", "john");
+                    authJsonParams.put("password", "john123");
+                    if (oauthApiCalls.generateOauthToken(authJsonParams) != null) {
+                        response = oauthApiCalls.generateOauthToken(authJsonParams);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 Log.d("TAG/User delete: ", response);
             }
