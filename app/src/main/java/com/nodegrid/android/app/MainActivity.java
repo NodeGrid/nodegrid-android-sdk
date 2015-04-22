@@ -14,7 +14,11 @@ import com.nodegrid.android.sdk.services.connections.SystemApiCalls;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+/**
+ * Created by kwijewardana on 4/22/15.
+ *
+ * @author Kavimal Wijewardana <kavi707@gmail.com>
+ */
 public class MainActivity extends ActionBarActivity {
 
     private Button checkSystemStatusBtn;
