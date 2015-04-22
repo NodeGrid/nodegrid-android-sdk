@@ -46,11 +46,11 @@ public class MainActivity extends ActionBarActivity {
         checkSystemStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "Null";
-                if (systemApiCalls.checkSystemStatus() != null){
-                    response = systemApiCalls.checkSystemStatus();
-                }
-                Log.d("TAG/System Status: ", response);
+                String response =  systemApiCalls.checkSystemStatus();
+                if (response != null)
+                    Log.d("TAG/System Status: ", response);
+                else
+                    Log.d("TAG/System Status: ", "NULL");
             }
         });
 
@@ -64,40 +64,41 @@ public class MainActivity extends ActionBarActivity {
         getSystemUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "Null";
-                if (systemApiCalls.searchUserFromUsername("john") != null) {
-                    response = systemApiCalls.searchUserFromUsername("john");
-                }
-                Log.d("TAG/User: ", response);
+                String response = systemApiCalls.searchUserFromUsername("john");
+                if (response != null)
+                    Log.d("TAG/User: ", response);
+                else
+                    Log.d("TAG/User: ", "NULL");
             }
         });
 
         deleteSystemUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "Null";
-                if (systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4") != null) {
-                    response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
-                }
-                Log.d("TAG/User delete: ", response);
+                String response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
+                if (response != null)
+                    Log.d("TAG/User delete: ", response);
+                else
+                    Log.d("TAG/User delete: ", "NULL");
             }
         });
 
         generateTokenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "Null";
+                String response = "NULL";
                 JSONObject authJsonParams = new JSONObject();
                 try {
                     authJsonParams.put("username", "john");
                     authJsonParams.put("password", "john123");
-                    if (oauthApiCalls.generateOauthToken(authJsonParams) != null) {
-                        response = oauthApiCalls.generateOauthToken(authJsonParams);
-                    }
+                    response = oauthApiCalls.generateOauthToken(authJsonParams);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d("TAG/User delete: ", response);
+                if (response != null)
+                    Log.d("TAG/Generate token: ", response);
+                else
+                    Log.d("TAG/Generate token: ", "NULL");
             }
         });
     }
