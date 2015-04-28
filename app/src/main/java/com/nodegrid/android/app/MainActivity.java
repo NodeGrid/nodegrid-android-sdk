@@ -8,11 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.nodegrid.android.sdk.services.connections.AppApiCalls;
 import com.nodegrid.android.sdk.services.connections.OauthApiCalls;
 import com.nodegrid.android.sdk.services.connections.SystemApiCalls;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by kwijewardana on 4/22/15.
@@ -28,8 +32,12 @@ public class MainActivity extends ActionBarActivity {
 
     private Button generateTokenBtn;
 
+    private Button getAllObjectBtn;
+    private Button getObjectFromIdBtn;
+
     private SystemApiCalls systemApiCalls = new SystemApiCalls();
     private OauthApiCalls oauthApiCalls = new OauthApiCalls();
+    private AppApiCalls appApiCalls = new AppApiCalls();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,9 @@ public class MainActivity extends ActionBarActivity {
         deleteSystemUserBtn = (Button) findViewById(R.id.systemUserDeleteBtn);
 
         generateTokenBtn = (Button) findViewById(R.id.generateTokenBtn);
+
+        getAllObjectBtn = (Button) findViewById(R.id.getAllObjectsBtn);
+        getObjectFromIdBtn = (Button) findViewById(R.id.getObjectFromIdBtn);
 
         checkSystemStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +114,38 @@ public class MainActivity extends ActionBarActivity {
                     Log.d("TAG/Generate token: ", response);
                 else
                     Log.d("TAG/Generate token: ", "NULL");
+            }
+        });
+
+        getAllObjectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String response = "Null";
+                Map<String, String> headerParams = new HashMap<>();
+                headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
+
+                response = appApiCalls.readAllCollectionObjects("cars", headerParams);
+
+                if (response != null)
+                    Log.d("TAG/Objects: ", response);
+                else
+                    Log.d("TAG/Objects: ", "NULL");
+            }
+        });
+
+        getObjectFromIdBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String response = "Null";
+                Map<String, String> headerParams = new HashMap<>();
+                headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
+
+                response = appApiCalls.readCollectionObjectFromId("cars", "54dd8c8a592867fe084e5af5", headerParams);
+
+                if (response != null)
+                    Log.d("TAG/Objects: ", response);
+                else
+                    Log.d("TAG/Objects: ", "NULL");
             }
         });
     }
