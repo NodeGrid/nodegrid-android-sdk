@@ -47,14 +47,16 @@ public class ApiConnector {
     private String httpCommonResponse  = "NULL";
 
     /**
-     * method for sending http get, put or delete requests to api
-     * @param requestUrl
+     * Method for sending HTTP GET, PUT or DELETE requests to api
+     * @param url End point url (String)
+     * @param requestMethod Request method HTTP GET, PUT or DELETE (String)
+     * @param additionalHeaders Request HTTP headers (Map<String, String> - header key & heade value)
      * @return String object (returns a json string)
      */
-    protected String sendHttpRequest(String requestUrl, String requestMethod, Map<String, String> additionalHeaders) {
+    protected String sendHttpRequest(String url, String requestMethod, Map<String, String> additionalHeaders) {
 
         Log.d("ApiConnector", "ApiConnector:sendHttpRequest");
-        this.requestUrl = requestUrl;
+        this.requestUrl = url;
         this.requestMethod = requestMethod;
         this.getAdditionalHeaders = additionalHeaders;
 
@@ -116,9 +118,11 @@ public class ApiConnector {
     }
 
     /**
-     * Calling the background task to sending HTTP Post using JSON data
-     * @param url
-     * @param reqParams
+     * Method for sending HTTP POST requests to api using JSON data
+     * @param url End point url (String)
+     * @param additionalHeader Request HTTP headers (Map<String, String> - header key & heade value)
+     * @param reqParams POST request body parameters (JSONObject)
+     * @return String object (returns a json string)
      */
     protected String sendHttpJsonPostReq(String url, Map<String, String> additionalHeader, JSONObject reqParams) {
         Log.d("ApiConnector", "ApiConnector:sendHttpJsonPostReq");
