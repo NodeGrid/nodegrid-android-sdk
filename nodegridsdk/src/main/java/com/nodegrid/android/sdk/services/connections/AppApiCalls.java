@@ -11,6 +11,12 @@ import java.util.Map;
  */
 public class AppApiCalls extends ApiConnector {
 
+    /**
+     *
+     * @param collectionName
+     * @param headerParams
+     * @return
+     */
     public String readAllCollectionObjects (String collectionName, Map<String, String> headerParams) {
         String resultResponse;
         resultResponse = sendHttpRequest(CommonUtils.NODEGRID_SERVER_URL + "/app/" + collectionName,
@@ -18,6 +24,13 @@ public class AppApiCalls extends ApiConnector {
         return resultResponse;
     }
 
+    /**
+     *
+     * @param collectionName
+     * @param objectId
+     * @param headerParams
+     * @return
+     */
     public String readCollectionObjectFromId (String collectionName, String objectId, Map<String, String> headerParams) {
         String resultResponse;
         resultResponse = sendHttpRequest(CommonUtils.NODEGRID_SERVER_URL + "/app/" + collectionName +

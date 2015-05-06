@@ -79,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
         getSystemUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO REMOVE - Username is hardcoded for retrieve system user
                 String response = systemApiCalls.searchUserFromUsername("john");
                 if (response != null)
                     Log.d("TAG/User: ", response);
@@ -90,6 +91,7 @@ public class MainActivity extends ActionBarActivity {
         deleteSystemUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO REMOVE - UserId is hardcoded for delete
                 String response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
                 if (response != null)
                     Log.d("TAG/User delete: ", response);
@@ -103,6 +105,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 String response = "NULL";
                 JSONObject authJsonParams = new JSONObject();
+                //TODO REMOVE - Username & Password is hardcoded for generateToken
                 try {
                     authJsonParams.put("username", "john");
                     authJsonParams.put("password", "john123");
@@ -122,6 +125,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 String response = "Null";
                 Map<String, String> headerParams = new HashMap<>();
+                //TODO REMOVE - Generated token is hardcoded for retrieve data testing
                 headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
 
                 response = appApiCalls.readAllCollectionObjects("cars", headerParams);
@@ -138,6 +142,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 String response = "Null";
                 Map<String, String> headerParams = new HashMap<>();
+                //TODO REMOVE - Generated token is hardcoded for retrieve data testing
                 headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
 
                 response = appApiCalls.readCollectionObjectFromId("cars", "54dd8c8a592867fe084e5af5", headerParams);

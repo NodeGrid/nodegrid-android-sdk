@@ -11,6 +11,11 @@ import org.json.JSONObject;
  */
 public class OauthApiCalls extends ApiConnector {
 
+    /**
+     * Method for Generate accessToken for NodeGrid Api calls.
+     * @param authParams
+     * @return String Object (returns a json string)
+     */
     public String generateOauthToken(JSONObject authParams) {
         String resultResponse;
         resultResponse = sendHttpJsonPostReq(CommonUtils.NODEGRID_SERVER_URL + "/system/security/generateToken", null, authParams);
