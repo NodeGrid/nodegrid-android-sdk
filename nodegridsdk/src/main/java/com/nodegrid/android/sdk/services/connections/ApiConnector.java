@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.nodegrid.android.sdk.CommonUtils;
+import com.nodegrid.android.sdk.data.NodeGridData;
+import com.nodegrid.android.sdk.data.NodeGridResponse;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,6 +24,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -69,6 +73,7 @@ public class ApiConnector {
             e.printStackTrace();
         }
 
+        getNodeGridResponse(httpCommonResponse);
         return httpCommonResponse;
     }
 
@@ -220,5 +225,25 @@ public class ApiConnector {
 
             return responseResult;
         }
+    }
+
+    private NodeGridResponse getNodeGridResponse(String responseString) {
+        NodeGridResponse nodeGridResponse = new NodeGridResponse();
+        try {
+            JSONObject responseJson = new JSONObject(responseString);
+            nodeGridResponse.setStatus(responseJson.getString("status"));
+            nodeGridResponse.setMessage(responseJson.getString("msg"));
+            if (!responseJson.isNull("data")) {
+                JSONArray dataArray = responseJson.getJSONArray("data");
+            }
+
+            Log.d(">>>>>>>>>>>>>>>", nodeGridResponse.getStatus());
+            Log.d(">>>>>>>>>>>>>>>", nodeGridResponse.getMessage());
+            Log.d(">>>>>>>>>>>>>>>", String.valueOf(responseJson.isNull("data")));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return nodeGridResponse;
     }
 }
