@@ -1,5 +1,7 @@
 package com.nodegrid.android.sdk.data;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ public class NodeGridResponse {
 
     private String status;
     private String message;
+    private JSONObject responseObj;
     private List<NodeGridData> nodeGridData;
 
     public String getStatus() {
@@ -27,6 +30,14 @@ public class NodeGridResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public JSONObject getResponseObj() {
+        return responseObj;
+    }
+
+    public void setResponseObj(JSONObject responseObj) {
+        this.responseObj = responseObj;
     }
 
     public List<NodeGridData> getNodeGridData() {

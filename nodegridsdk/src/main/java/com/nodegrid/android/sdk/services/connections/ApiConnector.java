@@ -233,12 +233,18 @@ public class ApiConnector {
             JSONObject responseJson = new JSONObject(responseString);
             nodeGridResponse.setStatus(responseJson.getString("status"));
             nodeGridResponse.setMessage(responseJson.getString("msg"));
+
+            if (!responseJson.isNull("res")) {
+                nodeGridResponse.setResponseObj(responseJson.getJSONObject("res"));
+            }
+
             if (!responseJson.isNull("data")) {
                 JSONArray dataArray = responseJson.getJSONArray("data");
             }
 
             Log.d(">>>>>>>>>>>>>>>", nodeGridResponse.getStatus());
             Log.d(">>>>>>>>>>>>>>>", nodeGridResponse.getMessage());
+            Log.d(">>>>>>>>>>>>>>>", String.valueOf(nodeGridResponse.getResponseObj()));
             Log.d(">>>>>>>>>>>>>>>", String.valueOf(responseJson.isNull("data")));
 
         } catch (JSONException e) {
