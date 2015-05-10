@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.nodegrid.android.sdk.data.NodeGridResponse;
 import com.nodegrid.android.sdk.services.connections.AppApiCalls;
 import com.nodegrid.android.sdk.services.connections.OauthApiCalls;
 import com.nodegrid.android.sdk.services.connections.SystemApiCalls;
@@ -61,9 +62,9 @@ public class MainActivity extends ActionBarActivity {
         checkSystemStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response =  systemApiCalls.checkSystemStatus();
+                NodeGridResponse response =  systemApiCalls.checkSystemStatus();
                 if (response != null)
-                    Log.d("TAG/System Status: ", response);
+                    Log.d("TAG/System Status: ", response.getStatus());
                 else
                     Log.d("TAG/System Status: ", "NULL");
             }
@@ -80,9 +81,9 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //TODO REMOVE - Username is hardcoded for retrieve system user
-                String response = systemApiCalls.searchUserFromUsername("john");
+                NodeGridResponse response = systemApiCalls.searchUserFromUsername("john");
                 if (response != null)
-                    Log.d("TAG/User: ", response);
+                    Log.d("TAG/User: ", response.getStatus());
                 else
                     Log.d("TAG/User: ", "NULL");
             }
@@ -92,10 +93,11 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //TODO REMOVE - UserId is hardcoded for delete
-                String response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
-                if (response != null)
-                    Log.d("TAG/User delete: ", response);
-                else
+                NodeGridResponse response = systemApiCalls.deleteUserFromUserId("54dd8bd5592867fe084e5af4");
+                if (response != null) {
+                    Log.d("TAG/User delete: ", response.getStatus());
+                    Log.d("TAG/User delete: ", String.valueOf(response.getResponseObj()));
+                } else
                     Log.d("TAG/User delete: ", "NULL");
             }
         });
@@ -103,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
         generateTokenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "NULL";
+                NodeGridResponse response = null;
                 JSONObject authJsonParams = new JSONObject();
                 //TODO REMOVE - Username & Password is hardcoded for generateToken
                 try {
@@ -114,7 +116,7 @@ public class MainActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
                 if (response != null)
-                    Log.d("TAG/Generate token: ", response);
+                    Log.d("TAG/Generate token: ", response.getMessage());
                 else
                     Log.d("TAG/Generate token: ", "NULL");
             }
@@ -123,7 +125,7 @@ public class MainActivity extends ActionBarActivity {
         getAllObjectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "Null";
+                NodeGridResponse response;
                 Map<String, String> headerParams = new HashMap<>();
                 //TODO REMOVE - Generated token is hardcoded for retrieve data testing
                 headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
@@ -131,7 +133,7 @@ public class MainActivity extends ActionBarActivity {
                 response = appApiCalls.readAllCollectionObjects("cars", headerParams);
 
                 if (response != null)
-                    Log.d("TAG/Objects: ", response);
+                    Log.d("TAG/Objects: ", response.getStatus());
                 else
                     Log.d("TAG/Objects: ", "NULL");
             }
@@ -140,7 +142,7 @@ public class MainActivity extends ActionBarActivity {
         getObjectFromIdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String response = "Null";
+                NodeGridResponse response;
                 Map<String, String> headerParams = new HashMap<>();
                 //TODO REMOVE - Generated token is hardcoded for retrieve data testing
                 headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
@@ -148,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
                 response = appApiCalls.readCollectionObjectFromId("cars", "54dd8c8a592867fe084e5af5", headerParams);
 
                 if (response != null)
-                    Log.d("TAG/Objects: ", response);
+                    Log.d("TAG/Objects: ", response.getStatus());
                 else
                     Log.d("TAG/Objects: ", "NULL");
             }
