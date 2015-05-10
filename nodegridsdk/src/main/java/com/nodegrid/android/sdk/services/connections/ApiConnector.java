@@ -32,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -55,9 +57,9 @@ public class ApiConnector {
      * @param url End point url (String)
      * @param requestMethod Request method HTTP GET, PUT or DELETE (String)
      * @param additionalHeaders Request HTTP headers (Map<String, String> - header key & heade value)
-     * @return String object (returns a json string)
+     * @return NodeGridResponse object
      */
-    protected String sendHttpRequest(String url, String requestMethod, Map<String, String> additionalHeaders) {
+    protected NodeGridResponse sendHttpRequest(String url, String requestMethod, Map<String, String> additionalHeaders) {
 
         Log.d("ApiConnector", "ApiConnector:sendHttpRequest");
         this.requestUrl = url;
@@ -73,8 +75,8 @@ public class ApiConnector {
             e.printStackTrace();
         }
 
-        getNodeGridResponse(httpCommonResponse);
-        return httpCommonResponse;
+        return getNodeGridResponse(httpCommonResponse);
+        //return httpCommonResponse;
     }
 
     /**
@@ -87,6 +89,8 @@ public class ApiConnector {
 
             Log.d("ApiConnector", "ApiConnector:sendHttpGetTask");
             String responseResult = null;
+            HttpResponse httpResponse = null;
+            InputStream inputStream = null;
 
             HttpClient httpclient = new DefaultHttpClient();
             Log.d("ApiConnector", "ApiConnector:sendHttpGetTask / Req Url : " + requestUrl);
@@ -108,9 +112,28 @@ public class ApiConnector {
                 }
             }
 
-            ResponseHandler<String> handler = new BasicResponseHandler();
             try {
-                responseResult = httpclient.execute(request, handler);
+                httpResponse = httpclient.execute(request);
+                if (request.getMethod() == CommonUtils.HTTP_DELETE) {
+                    // If request is HTTP DELETE, creating the response object
+                    // In HTTP DELETE ignore the response object java httpClient
+                    int deleteStatusCode = httpResponse.getStatusLine().getStatusCode();
+                    if (deleteStatusCode == 200) {
+                        responseResult = "{\"status\":\"SUCCESS\", \"msg\":\"Data deleted successfully\"}";
+                    } else if (deleteStatusCode == 204) {
+                        responseResult = "{\"status\":\"ERROR\", \"msg\":\"No Content found to delete\"}";
+                    } else {
+                        responseResult = "{\"status\":\"ERROR\", \"msg\":"+ httpResponse.getStatusLine().getReasonPhrase() +"}";
+                    }
+                } else {
+                    // If request is not and HTTP DELETE, then read the input stream and extract json string
+                    inputStream = httpResponse.getEntity().getContent();
+                    if (inputStream != null) {
+                        responseResult = convertInputStreamToString(inputStream);
+                    } else {
+                        responseResult = "{\"status\":\"ERROR\", \"msg\":"+ httpResponse.getStatusLine().getReasonPhrase() +"}";
+                    }
+                }
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -120,6 +143,24 @@ public class ApiConnector {
 
             return responseResult;
         }
+
+        /**
+         * Create String object from InputStream
+         * @param inputStream HttpResponse extracted InputStream
+         * @return String object
+         * @throws IOException
+         */
+        private String convertInputStreamToString(InputStream inputStream) throws IOException{
+            BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+            String line = "";
+            String result = "";
+            while((line = bufferedReader.readLine()) != null)
+                result += line;
+
+            inputStream.close();
+            return result;
+
+        }
     }
 
     /**
@@ -127,9 +168,9 @@ public class ApiConnector {
      * @param url End point url (String)
      * @param additionalHeader Request HTTP headers (Map<String, String> - header key & heade value)
      * @param reqParams POST request body parameters (JSONObject)
-     * @return String object (returns a json string)
+     * @return NodeGridResponse object
      */
-    protected String sendHttpJsonPostReq(String url, Map<String, String> additionalHeader, JSONObject reqParams) {
+    protected NodeGridResponse sendHttpJsonPostReq(String url, Map<String, String> additionalHeader, JSONObject reqParams) {
         Log.d("ApiConnector", "ApiConnector:sendHttpJsonPostReq");
         this.postRequestUrl = url;
         this.getAdditionalHeaders = additionalHeader;
@@ -144,7 +185,7 @@ public class ApiConnector {
             e.printStackTrace();
         }
 
-        return httpCommonResponse;
+        return getNodeGridResponse(httpCommonResponse);
     }
 
     /**
@@ -197,22 +238,22 @@ public class ApiConnector {
                     StatusLine statusLine = response.getStatusLine();
                     int statusCode = statusLine.getStatusCode();
 
-                    if(statusCode == 200) {
-                        HttpEntity entity = response.getEntity();
-                        InputStream in = entity.getContent();
-                        BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
-                        String line;
-                        StringBuilder builder = new StringBuilder("");
-                        while ((line = bfr.readLine()) != null){
-                            builder.append(line + "\n");
-                        }
-                        in.close();
-                        String result = builder.toString();
-                        responseResult = result;
+                    HttpEntity entity = response.getEntity();
+                    InputStream in = entity.getContent();
+                    BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
+                    String line;
+                    StringBuilder builder = new StringBuilder("");
+                    while ((line = bfr.readLine()) != null){
+                        builder.append(line + "\n");
+                    }
+                    in.close();
+                    String result = builder.toString();
+                    responseResult = result;
+
+                    if (statusCode == 200) {
                         Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Status: Success Response : " + result);
                     } else {
                         Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Error status code: " + String.valueOf(statusCode));
-                        responseResult = "error";
                     }
                 } else {
                     Log.d("ApiConnector", "ApiConnector:SendHttpJSONPostTask / Error: null response after sending http req");
@@ -227,7 +268,13 @@ public class ApiConnector {
         }
     }
 
+    /**
+     * Create NodeGridResponse object from response json string received from NodeGrid
+     * @param responseString json string received from NodeGrid
+     * @return NodeGridResponse Object
+     */
     private NodeGridResponse getNodeGridResponse(String responseString) {
+
         NodeGridResponse nodeGridResponse = new NodeGridResponse();
         try {
             JSONObject responseJson = new JSONObject(responseString);
@@ -240,12 +287,24 @@ public class ApiConnector {
 
             if (!responseJson.isNull("data")) {
                 JSONArray dataArray = responseJson.getJSONArray("data");
-            }
 
-            Log.d(">>>>>>>>>>>>>>>", nodeGridResponse.getStatus());
-            Log.d(">>>>>>>>>>>>>>>", nodeGridResponse.getMessage());
-            Log.d(">>>>>>>>>>>>>>>", String.valueOf(nodeGridResponse.getResponseObj()));
-            Log.d(">>>>>>>>>>>>>>>", String.valueOf(responseJson.isNull("data")));
+                List<NodeGridData> nodeGridDataList = new ArrayList<>();
+                NodeGridData nodeGridData;
+
+                for (int dataIterator = 0; dataIterator < dataArray.length(); dataIterator ++) {
+
+                    nodeGridData = new NodeGridData();
+
+                    JSONObject dataObj = dataArray.getJSONObject(dataIterator);
+                    nodeGridData.setId(dataObj.getString("_id"));
+                    nodeGridData.setVersion(dataObj.getString("__v"));
+                    nodeGridData.setData(dataObj.getJSONObject("data"));
+
+                    nodeGridDataList.add(nodeGridData);
+                }
+
+                nodeGridResponse.setNodeGridData(nodeGridDataList);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

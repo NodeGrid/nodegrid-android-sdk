@@ -1,5 +1,7 @@
 package com.nodegrid.android.sdk.data;
 
+import org.json.JSONObject;
+
 /**
  * Created by kwijewardana on 4/29/15.
  *
@@ -8,7 +10,7 @@ package com.nodegrid.android.sdk.data;
 public class NodeGridData {
 
     private String id;
-    private String data;
+    private JSONObject data;
     private String version;
 
     public String getId() {
@@ -19,11 +21,11 @@ public class NodeGridData {
         this.id = id;
     }
 
-    public String getData() {
+    public JSONObject getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(JSONObject data) {
         this.data = data;
     }
 
