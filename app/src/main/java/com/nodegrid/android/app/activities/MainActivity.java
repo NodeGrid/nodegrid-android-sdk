@@ -2,6 +2,7 @@ package com.nodegrid.android.app.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -190,6 +191,8 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
 
