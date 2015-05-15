@@ -12,4 +12,7 @@
     <string name="get_all_objects_title">Get All Objects</string>
     <string name="get_object_from_id_title">Get Object From ID</string>
     <string name="press_key_to_continue_title">Press here to Continue . . .</string>
+    <string name="request_title">Request</string>
+    <string name="response_title">Response</string>
+    <string name="close_title">Close</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.nodegrid.android.app;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +38,8 @@ public class MainActivity extends ActionBarActivity {
     private Button getAllObjectBtn;
     private Button getObjectFromIdBtn;
 
+    private Context context = this;
+
     private SystemApiCalls systemApiCalls = new SystemApiCalls();
     private OauthApiCalls oauthApiCalls = new OauthApiCalls();
     private AppApiCalls appApiCalls = new AppApiCalls();
@@ -63,10 +67,12 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 NodeGridResponse response =  systemApiCalls.checkSystemStatus();
-                if (response != null)
+                if (response != null) {
                     Log.d("TAG/System Status: ", response.getStatus());
-                else
+                    createViewDialog().show();
+                } else {
                     Log.d("TAG/System Status: ", "NULL");
+                }
             }
         });
 
@@ -82,10 +88,11 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 //TODO REMOVE - Username is hardcoded for retrieve system user
                 NodeGridResponse response = systemApiCalls.searchUserFromUsername("john");
-                if (response != null)
+                if (response != null) {
                     Log.d("TAG/User: ", response.getStatus());
-                else
+                } else {
                     Log.d("TAG/User: ", "NULL");
+                }
             }
         });
 
@@ -97,8 +104,9 @@ public class MainActivity extends ActionBarActivity {
                 if (response != null) {
                     Log.d("TAG/User delete: ", response.getStatus());
                     Log.d("TAG/User delete: ", String.valueOf(response.getResponseObj()));
-                } else
+                } else {
                     Log.d("TAG/User delete: ", "NULL");
+                }
             }
         });
 
@@ -115,10 +123,11 @@ public class MainActivity extends ActionBarActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (response != null)
+                if (response != null) {
                     Log.d("TAG/Generate token: ", response.getMessage());
-                else
+                } else {
                     Log.d("TAG/Generate token: ", "NULL");
+                }
             }
         });
 
@@ -132,10 +141,11 @@ public class MainActivity extends ActionBarActivity {
 
                 response = appApiCalls.readAllCollectionObjects("cars", headerParams);
 
-                if (response != null)
+                if (response != null) {
                     Log.d("TAG/Objects: ", response.getStatus());
-                else
+                } else {
                     Log.d("TAG/Objects: ", "NULL");
+                }
             }
         });
 
@@ -149,10 +159,11 @@ public class MainActivity extends ActionBarActivity {
 
                 response = appApiCalls.readCollectionObjectFromId("cars", "54dd8c8a592867fe084e5af5", headerParams);
 
-                if (response != null)
+                if (response != null) {
                     Log.d("TAG/Objects: ", response.getStatus());
-                else
+                } else {
                     Log.d("TAG/Objects: ", "NULL");
+                }
             }
         });
     }
@@ -177,5 +188,21 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Dialog createViewDialog() {
+        final Dialog responseViewDialog = new Dialog(context);
+        responseViewDialog.setContentView(R.layout.view_response);
+        responseViewDialog.setTitle("NodeGrid");
+
+        Button dialogCloseButton = (Button) responseViewDialog.findViewById(R.id.viewCloseButton);
+        dialogCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                responseViewDialog.dismiss();
+            }
+        });
+
+        return responseViewDialog;
     }
 }
