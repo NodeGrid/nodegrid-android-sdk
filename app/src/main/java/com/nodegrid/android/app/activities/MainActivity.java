@@ -1,4 +1,4 @@
-package com.nodegrid.android.app;
+package com.nodegrid.android.app.activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.nodegrid.android.app.AppCommonUtils;
+import com.nodegrid.android.app.R;
 import com.nodegrid.android.sdk.data.NodeGridResponse;
 import com.nodegrid.android.sdk.services.connections.AppApiCalls;
 import com.nodegrid.android.sdk.services.connections.OauthApiCalls;
@@ -43,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
     private SystemApiCalls systemApiCalls = new SystemApiCalls();
     private OauthApiCalls oauthApiCalls = new OauthApiCalls();
     private AppApiCalls appApiCalls = new AppApiCalls();
+    private AppCommonUtils appCommonUtils = new AppCommonUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,10 @@ public class MainActivity extends ActionBarActivity {
                 NodeGridResponse response =  systemApiCalls.checkSystemStatus();
                 if (response != null) {
                     Log.d("TAG/System Status: ", response.getStatus());
-                    createViewDialog().show();
+                    Map<String, String> requestObject = new HashMap<>();
+                    requestObject.put("method", "GET");
+                    requestObject.put("endPoint", "[/system/status]");
+                    appCommonUtils.createViewDialog(context, requestObject, response).show();
                 } else {
                     Log.d("TAG/System Status: ", "NULL");
                 }
@@ -188,21 +194,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private Dialog createViewDialog() {
-        final Dialog responseViewDialog = new Dialog(context);
-        responseViewDialog.setContentView(R.layout.view_response);
-        responseViewDialog.setTitle("NodeGrid");
-
-        Button dialogCloseButton = (Button) responseViewDialog.findViewById(R.id.viewCloseButton);
-        dialogCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                responseViewDialog.dismiss();
-            }
-        });
-
-        return responseViewDialog;
     }
 }

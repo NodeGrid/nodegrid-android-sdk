@@ -1,10 +1,12 @@
-package com.nodegrid.android.app;
+package com.nodegrid.android.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.nodegrid.android.app.R;
 
 /**
  * Created by kwijewardana on 4/22/15.

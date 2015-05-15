@@ -20,6 +20,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:text="@string/request_title"
+            android:textStyle="bold|italic"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
@@ -32,15 +33,39 @@
             android:layout_alignParentStart="true"
             android:id="@+id/requestLinearLayout">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/requestMethodTextView"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/responseTitleTextView"
+                android:layout_toEndOf="@+id/responseTitleTextView" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/requestEndPointTextView" />
+
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/requestLinearLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/space" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/response_title"
+            android:textStyle="bold|italic"
             android:id="@+id/responseTitleTextView"
-            android:layout_below="@+id/requestLinearLayout"
+            android:layout_below="@+id/space"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -48,23 +73,45 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/responseLinearLayout"
             android:layout_below="@+id/responseTitleTextView"
             android:layout_alignLeft="@+id/requestLinearLayout"
-            android:layout_alignStart="@+id/requestLinearLayout"
-            android:id="@+id/responseLinearLayout">
+            android:layout_alignStart="@+id/requestLinearLayout">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/responseStatusTextView" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/responseMsgTextView" />
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="fill_parent"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/responseLinearLayout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/space2" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/close_title"
             android:id="@+id/viewCloseButton"
-            android:layout_below="@+id/responseLinearLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/space2"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 </RelativeLayout>
