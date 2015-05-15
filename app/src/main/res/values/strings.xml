@@ -17,4 +17,5 @@
     <string name="close_title">Close</string>
     <string name="configuration_label">Configurations</string>
     <string name="nodegrid_server_url_title">NodeGrid Server URL:</string>
+    <string name="description_title">Simple and Light-weight mBaaS from NodeJS</string>
 </resources>

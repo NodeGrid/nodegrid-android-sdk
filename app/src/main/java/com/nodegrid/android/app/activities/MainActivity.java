@@ -97,6 +97,10 @@ public class MainActivity extends ActionBarActivity {
                 NodeGridResponse response = systemApiCalls.searchUserFromUsername("john");
                 if (response != null) {
                     Log.d("TAG/User: ", response.getStatus());
+                    Map<String, String> requestObject = new HashMap<>();
+                    requestObject.put("method", "GET");
+                    requestObject.put("endPoint", "[/system/users/<username>]");
+                    appCommonUtils.createViewDialog(context, requestObject, response).show();
                 } else {
                     Log.d("TAG/User: ", "NULL");
                 }
@@ -111,6 +115,10 @@ public class MainActivity extends ActionBarActivity {
                 if (response != null) {
                     Log.d("TAG/User delete: ", response.getStatus());
                     Log.d("TAG/User delete: ", String.valueOf(response.getResponseObj()));
+                    Map<String, String> requestObject = new HashMap<>();
+                    requestObject.put("method", "DELETE");
+                    requestObject.put("endPoint", "[/system/user/<userId>]");
+                    appCommonUtils.createViewDialog(context, requestObject, response).show();
                 } else {
                     Log.d("TAG/User delete: ", "NULL");
                 }
@@ -132,6 +140,10 @@ public class MainActivity extends ActionBarActivity {
                 }
                 if (response != null) {
                     Log.d("TAG/Generate token: ", response.getMessage());
+                    Map<String, String> requestObject = new HashMap<>();
+                    requestObject.put("method", "POST");
+                    requestObject.put("endPoint", "[/system/security/generateToken]");
+                    appCommonUtils.createViewDialog(context, requestObject, response).show();
                 } else {
                     Log.d("TAG/Generate token: ", "NULL");
                 }
@@ -145,7 +157,7 @@ public class MainActivity extends ActionBarActivity {
                 Map<String, String> headerParams = new HashMap<>();
                 //TODO REMOVE - Generated token is hardcoded for retrieve data testing
                 headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
-
+                //TODO REMOVE - Reading object is hardcoded 'cars'
                 response = appApiCalls.readAllCollectionObjects("cars", headerParams);
 
                 if (response != null) {
@@ -163,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
                 Map<String, String> headerParams = new HashMap<>();
                 //TODO REMOVE - Generated token is hardcoded for retrieve data testing
                 headerParams.put("Authorization", "eb88047ab090c558a1149b3df4b08a92fa951d14");
-
+                //TODO REMOVE - Reading object and object ID are hardcoded 'cars' & '54dd8c8a592867fe084e5af5'
                 response = appApiCalls.readCollectionObjectFromId("cars", "54dd8c8a592867fe084e5af5", headerParams);
 
                 if (response != null) {
