@@ -2,6 +2,8 @@ package com.nodegrid.android.app;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +18,8 @@ import java.util.Map;
  * @author Kavimal Wijewardana <kavi707@gmail.com>
  */
 public class AppCommonUtils {
+
+    public static final String NODEGRID_PREFS_NAME = "NodeGridPrefFile";
 
     /**
      * Create NodeGrid response object viewing popup.
@@ -49,5 +53,32 @@ public class AppCommonUtils {
         });
 
         return responseViewDialog;
+    }
+
+    /**
+     * Store given value under the given key in shared preferences
+     * @param context Activity context
+     * @param key Key you need to share your value in shared preferences
+     * @param value Value you need to store in share preferences
+     */
+    public void setSharedPref(Context context, String key, String value) {
+        SharedPreferences.Editor sharePrefEditor =
+                context.getSharedPreferences(NODEGRID_PREFS_NAME, context.MODE_PRIVATE).edit();
+        sharePrefEditor.putString(key, value);
+        sharePrefEditor.apply();
+    }
+
+    /**
+     * Retrieve stored value ahead to given key
+     * @param context Activity context
+     * @param key Key of the value you store in shared preferences
+     * @return String - Stored value in shared preferences under the given key
+     */
+    public String getSharePref(Context context, String key) {
+        String sharedPrefValue = "";
+        SharedPreferences preferences = context.getSharedPreferences(NODEGRID_PREFS_NAME, context.MODE_PRIVATE);
+        sharedPrefValue = preferences.getString(key, "http://192.168.1.2:3000");
+
+        return sharedPrefValue;
     }
 }

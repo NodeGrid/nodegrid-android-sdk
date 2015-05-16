@@ -11,5 +11,5 @@ public class CommonUtils {
     public static final String HTTP_PUT = "PUT";
     public static final String HTTP_DELETE = "DELETE";
 
-    public static String NODEGRID_SERVER_URL = "http://192.168.2.4:3000";
+    public static String NODEGRID_SERVER_URL = "http://192.168.1.2:3000";
 }

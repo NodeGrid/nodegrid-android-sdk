@@ -38,7 +38,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nodegridUrlEditText"
-        android:hint="http://192.168.1.2:3000"
         android:gravity="center"
         android:layout_below="@+id/nodegridUrlTextView"
         android:layout_alignLeft="@+id/nodegridUrlTextView"
