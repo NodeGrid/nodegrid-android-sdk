@@ -6,8 +6,11 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nodegrid.android.app.adapters.DataItemAdapter;
 import com.nodegrid.android.sdk.data.NodeGridResponse;
 
 import java.util.Map;
@@ -37,13 +40,32 @@ public class AppCommonUtils {
         TextView requestEndPointTextView = (TextView) responseViewDialog.findViewById(R.id.requestEndPointTextView);
         TextView responseStatusTextView = (TextView) responseViewDialog.findViewById(R.id.responseStatusTextView);
         TextView responseMsgTextView = (TextView) responseViewDialog.findViewById(R.id.responseMsgTextView);
+        TextView responseObjectTextView = (TextView) responseViewDialog.findViewById(R.id.responseObjectTextView);
+        LinearLayout responseObjectLinearLayout = (LinearLayout) responseViewDialog.findViewById(R.id.responseObjectLinearLayout);
+        TextView responseDataTitleTextView = (TextView) responseViewDialog.findViewById(R.id.dataTitleTextView);
+        ListView dataListView = (ListView) responseViewDialog.findViewById(R.id.dataListView);
         Button dialogCloseButton = (Button) responseViewDialog.findViewById(R.id.viewCloseButton);
+
+        responseObjectLinearLayout.setVisibility(View.INVISIBLE);
+        responseDataTitleTextView.setVisibility(View.INVISIBLE);
+        dataListView.setVisibility(View.INVISIBLE);
 
         requestMethodTextView.setText(requestObject.get("method"));
         requestEndPointTextView.setText(requestObject.get("endPoint"));
 
         responseStatusTextView.setText(nodeGridResponse.getStatus());
         responseMsgTextView.setText(nodeGridResponse.getMessage());
+        if (nodeGridResponse.getResponseObj() != null) {
+            responseObjectLinearLayout.setVisibility(View.VISIBLE);
+            responseObjectTextView.setText(nodeGridResponse.getResponseObj().toString());
+        }
+
+        if (nodeGridResponse.getNodeGridData() != null) {
+            responseDataTitleTextView.setVisibility(View.VISIBLE);
+            dataListView.setVisibility(View.VISIBLE);
+            DataItemAdapter dataItemAdapter = new DataItemAdapter(nodeGridResponse.getNodeGridData(), context);
+            dataListView.setAdapter(dataItemAdapter);
+        }
 
         dialogCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
