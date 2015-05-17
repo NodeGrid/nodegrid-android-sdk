@@ -308,6 +308,11 @@ public class ApiConnector {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            nodeGridResponse.setStatus("ERROR");
+            nodeGridResponse.setMessage(e.getMessage());
+        } catch (NullPointerException e) {
+            nodeGridResponse.setStatus("ERROR");
+            nodeGridResponse.setMessage(e.getMessage() + " \n or " + CommonUtils.NODEGRID_SERVER_URL + " connection can be refused");
         }
         return nodeGridResponse;
     }
