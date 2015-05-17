@@ -1,7 +1,10 @@
 package com.nodegrid.android.sdk.services.connections;
 
+import android.content.Context;
+
 import com.nodegrid.android.sdk.CommonUtils;
 import com.nodegrid.android.sdk.data.NodeGridResponse;
+import com.nodegrid.android.sdk.services.ActivityUserPermissionServices;
 
 import org.json.JSONObject;
 
@@ -12,6 +15,13 @@ import org.json.JSONObject;
  */
 public class OauthApiCalls extends ApiConnector {
 
+    private Context context;
+    private ActivityUserPermissionServices activityUserPermissionServices = new ActivityUserPermissionServices();
+
+    public OauthApiCalls(Context context) {
+        this.context = context;
+    }
+
     /**
      * Method for Generate accessToken for NodeGrid Api calls.
      * @param authParams
@@ -19,7 +29,14 @@ public class OauthApiCalls extends ApiConnector {
      */
     public NodeGridResponse generateOauthToken(JSONObject authParams) {
         NodeGridResponse resultResponse;
-        resultResponse = sendHttpJsonPostReq(CommonUtils.NODEGRID_SERVER_URL + "/system/security/generateToken", null, authParams);
+        if (activityUserPermissionServices.isOnline(context)) {
+            resultResponse = sendHttpJsonPostReq(CommonUtils.NODEGRID_SERVER_URL + "/system/security/generateToken",
+                    null, authParams);
+        } else {
+            resultResponse = new NodeGridResponse();
+            resultResponse.setStatus("ERROR");
+            resultResponse.setMessage("Network is not available");
+        }
         return resultResponse;
     }
 }

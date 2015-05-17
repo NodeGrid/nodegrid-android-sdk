@@ -43,9 +43,9 @@ public class MainActivity extends ActionBarActivity {
 
     private Context context = this;
 
-    private SystemApiCalls systemApiCalls = new SystemApiCalls();
-    private OauthApiCalls oauthApiCalls = new OauthApiCalls();
-    private AppApiCalls appApiCalls = new AppApiCalls();
+    private SystemApiCalls systemApiCalls = new SystemApiCalls(context);
+    private OauthApiCalls oauthApiCalls = new OauthApiCalls(context);
+    private AppApiCalls appApiCalls = new AppApiCalls(context);
     private AppCommonUtils appCommonUtils = new AppCommonUtils();
 
     @Override

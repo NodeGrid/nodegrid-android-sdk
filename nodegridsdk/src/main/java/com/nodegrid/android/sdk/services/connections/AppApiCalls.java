@@ -1,7 +1,10 @@
 package com.nodegrid.android.sdk.services.connections;
 
+import android.content.Context;
+
 import com.nodegrid.android.sdk.CommonUtils;
 import com.nodegrid.android.sdk.data.NodeGridResponse;
+import com.nodegrid.android.sdk.services.ActivityUserPermissionServices;
 
 import java.util.Map;
 
@@ -12,6 +15,13 @@ import java.util.Map;
  */
 public class AppApiCalls extends ApiConnector {
 
+    private Context context;
+    private ActivityUserPermissionServices activityUserPermissionServices = new ActivityUserPermissionServices();
+
+    public AppApiCalls(Context context) {
+        this.context = context;
+    }
+
     /**
      *
      * @param collectionName
@@ -20,8 +30,14 @@ public class AppApiCalls extends ApiConnector {
      */
     public NodeGridResponse readAllCollectionObjects (String collectionName, Map<String, String> headerParams) {
         NodeGridResponse resultResponse;
-        resultResponse = sendHttpRequest(CommonUtils.NODEGRID_SERVER_URL + "/app/" + collectionName,
-                CommonUtils.HTTP_GET, headerParams);
+        if (activityUserPermissionServices.isOnline(context)) {
+            resultResponse = sendHttpRequest(CommonUtils.NODEGRID_SERVER_URL + "/app/" + collectionName,
+                    CommonUtils.HTTP_GET, headerParams);
+        } else {
+            resultResponse = new NodeGridResponse();
+            resultResponse.setStatus("ERROR");
+            resultResponse.setMessage("Network is not available");
+        }
         return resultResponse;
     }
 
@@ -34,8 +50,14 @@ public class AppApiCalls extends ApiConnector {
      */
     public NodeGridResponse readCollectionObjectFromId (String collectionName, String objectId, Map<String, String> headerParams) {
         NodeGridResponse resultResponse;
-        resultResponse = sendHttpRequest(CommonUtils.NODEGRID_SERVER_URL + "/app/" + collectionName +
-                        "/" + objectId, CommonUtils.HTTP_GET, headerParams);
+        if (activityUserPermissionServices.isOnline(context)) {
+            resultResponse = sendHttpRequest(CommonUtils.NODEGRID_SERVER_URL + "/app/" + collectionName +
+                    "/" + objectId, CommonUtils.HTTP_GET, headerParams);
+        } else {
+            resultResponse = new NodeGridResponse();
+            resultResponse.setStatus("ERROR");
+            resultResponse.setMessage("Network is not available");
+        }
         return resultResponse;
     }
 }
