@@ -87,6 +87,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 String response = "Null";
+
+                Intent navIntent = new Intent(MainActivity.this, NavDrawerActivity.class);
+                startActivity(navIntent);
+                finish();
             }
         });
 
