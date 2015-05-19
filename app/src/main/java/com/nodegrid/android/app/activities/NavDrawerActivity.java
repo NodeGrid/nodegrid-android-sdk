@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nodegrid.android.app.R;
 import com.nodegrid.android.app.adapters.DrawerSystemApiListAdapter;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 
 /**
  * Created by kwijewardana on 5/18/15.
+ *
+ * @author Kavimal Wijewardana <kavi707@gmail.com>
  */
 public class NavDrawerActivity extends Activity {
 
@@ -43,19 +46,21 @@ public class NavDrawerActivity extends Activity {
     }
 
     private void setUpViews() {
-        mNavItems.add(new NavItem("System API Calls", "REST calls for NodeGrid systematic scenarios"));
-        mNavItems.add(new NavItem("Check NodeGrid Status", null));
-        mNavItems.add(new NavItem("Create new user", null));
-        mNavItems.add(new NavItem("Retrieve user", null));
-        mNavItems.add(new NavItem("Delete user", null));
-        mNavItems.add(new NavItem("Oauth API Calls", "REST calls for NodeGrid authentication"));
-        mNavItems.add(new NavItem("Generate token", null));
-        mNavItems.add(new NavItem("App API Calls", "REST calls for NodeGrid App"));
-        mNavItems.add(new NavItem("Store object", null));
-        mNavItems.add(new NavItem("Retrieve objects", null));
-        mNavItems.add(new NavItem("Retrieve object from ID", null));
-        mNavItems.add(new NavItem("Advance querying", null));
-        mNavItems.add(new NavItem("Delete object from ID", null));
+        mNavItems.add(new NavItem("System API Calls", "REST calls for NodeGrid systematic scenarios", true));
+        mNavItems.add(new NavItem("Check NodeGrid Status", null, false));
+        mNavItems.add(new NavItem("Create new user", null, false));
+        mNavItems.add(new NavItem("Retrieve user", null, false));
+        mNavItems.add(new NavItem("Delete user", null, false));
+        mNavItems.add(new NavItem("", null, true));
+        mNavItems.add(new NavItem("Oauth API Calls", "REST calls for NodeGrid authentication", true));
+        mNavItems.add(new NavItem("Generate token", null, false));
+        mNavItems.add(new NavItem("", null, true));
+        mNavItems.add(new NavItem("App API Calls", "REST calls for NodeGrid App", true));
+        mNavItems.add(new NavItem("Store object", null, false));
+        mNavItems.add(new NavItem("Retrieve objects", null, false));
+        mNavItems.add(new NavItem("Retrieve object from ID", null, false));
+        mNavItems.add(new NavItem("Advance querying", null, false));
+        mNavItems.add(new NavItem("Delete object from ID", null, false));
 
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -70,7 +75,7 @@ public class NavDrawerActivity extends Activity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position);
+                selectItemFromDrawer(position, view);
             }
         });
 
@@ -89,7 +94,6 @@ public class NavDrawerActivity extends Activity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                Log.d("TAG", "onDrawerClosed: " + getTitle());
 
                 invalidateOptionsMenu();
             }
@@ -102,19 +106,24 @@ public class NavDrawerActivity extends Activity {
      * Called when a particular item from the navigation drawer
      * @param position
      */
-    private void selectItemFromDrawer(int position) {
-        Fragment fragment = new methodGETFragment();
+    private void selectItemFromDrawer(int position, View view) {
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.mainContent, fragment)
-                .commit();
+        if (!mNavItems.get(position).isTitle()) {
 
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mNavItems.get(position).getMTitle());
+            view.setBackgroundColor(getResources().getColor(R.color.light_blue));
 
-        // Close the drawer
-        mDrawerLayout.closeDrawer(mDrawerPane);
+            Fragment fragment = new methodGETFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContent, fragment)
+                    .commit();
+
+            mDrawerList.setItemChecked(position, true);
+            setTitle(mNavItems.get(position).getMTitle());
+
+            // Close the drawer
+            mDrawerLayout.closeDrawer(mDrawerPane);
+        }
     }
 
     @Override
