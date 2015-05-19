@@ -34,6 +34,7 @@ public class NavDrawerActivity extends Activity {
     private LinearLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
+    private View listFinalTouchedView = null;
 
     ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
@@ -110,6 +111,11 @@ public class NavDrawerActivity extends Activity {
 
         if (!mNavItems.get(position).isTitle()) {
 
+            if (listFinalTouchedView != null) {
+                listFinalTouchedView.setBackgroundColor(getResources().getColor(R.color.white));
+            }
+
+            listFinalTouchedView = view;
             view.setBackgroundColor(getResources().getColor(R.color.light_blue));
 
             Fragment fragment = new methodGETFragment();
