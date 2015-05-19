@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:gravity="center_vertical"
+        android:textStyle="bold"
         android:textColor="#000"
         android:text="Line 1"
         android:layout_alignParentTop="true"
