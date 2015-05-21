@@ -2,6 +2,7 @@ package com.nodegrid.android.app.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class DrawerSystemApiListAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         View view;
 
         if (convertView == null) {
@@ -59,8 +61,11 @@ public class DrawerSystemApiListAdapter extends BaseAdapter{
         TextView titleView = (TextView) view.findViewById(R.id.mainTitle);
         TextView subtitleView = (TextView) view.findViewById(R.id.subTitle);
 
-        titleView.setText( mNavItems.get(position).getMTitle());
+        titleView.setText(mNavItems.get(position).getMTitle());
         if (mNavItems.get(position).getMSubTitle() != null) {
+            titleView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            titleView.setPadding(0, 0, 0, 0);
+            subtitleView.setVisibility(View.VISIBLE);
             subtitleView.setText(mNavItems.get(position).getMSubTitle());
         } else {
             subtitleView.setVisibility(View.GONE);
