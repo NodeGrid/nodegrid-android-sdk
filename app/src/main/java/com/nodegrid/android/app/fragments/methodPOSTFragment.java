@@ -13,9 +13,9 @@ import com.nodegrid.android.app.R;
  *
  * @author Kavimal Wijewardana <kavi707@gmail.com>
  */
-public class methodPOSTFragment extends Fragment {
+public class MethodPOSTFragment extends Fragment {
 
-    public methodPOSTFragment() {
+    public MethodPOSTFragment() {
         // Required empty public constructor
     }
 

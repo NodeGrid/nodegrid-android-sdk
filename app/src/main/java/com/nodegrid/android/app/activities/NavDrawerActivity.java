@@ -5,20 +5,18 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.nodegrid.android.app.R;
 import com.nodegrid.android.app.adapters.DrawerSystemApiListAdapter;
-import com.nodegrid.android.app.fragments.methodGETFragment;
+import com.nodegrid.android.app.fragments.MethodFragment;
+import com.nodegrid.android.app.fragments.MethodPOSTFragment;
 import com.nodegrid.android.app.views.NavItem;
 
 import java.util.ArrayList;
@@ -47,21 +45,21 @@ public class NavDrawerActivity extends Activity {
     }
 
     private void setUpViews() {
-        mNavItems.add(new NavItem("System API Calls", "REST calls for NodeGrid systematic scenarios", true));
-        mNavItems.add(new NavItem("Check NodeGrid Status", null, false));
-        mNavItems.add(new NavItem("Create new user", null, false));
-        mNavItems.add(new NavItem("Retrieve user", null, false));
-        mNavItems.add(new NavItem("Delete user", null, false));
-        mNavItems.add(new NavItem("", null, true));
-        mNavItems.add(new NavItem("Oauth API Calls", "REST calls for NodeGrid authentication", true));
-        mNavItems.add(new NavItem("Generate token", null, false));
-        mNavItems.add(new NavItem("", null, true));
-        mNavItems.add(new NavItem("App API Calls", "REST calls for NodeGrid App", true));
-        mNavItems.add(new NavItem("Store object", null, false));
-        mNavItems.add(new NavItem("Retrieve objects", null, false));
-        mNavItems.add(new NavItem("Retrieve object from ID", null, false));
-        mNavItems.add(new NavItem("Advance querying", null, false));
-        mNavItems.add(new NavItem("Delete object from ID", null, false));
+        mNavItems.add(new NavItem("System API Calls", "REST calls for NodeGrid systematic scenarios", true, null));
+        mNavItems.add(new NavItem("Check NodeGrid Status", null, false, "GET"));
+        mNavItems.add(new NavItem("Create new user", null, false, "POST"));
+        mNavItems.add(new NavItem("Retrieve user", null, false, "GET"));
+        mNavItems.add(new NavItem("Delete user", null, false, "DELETE"));
+        mNavItems.add(new NavItem("", null, true, null));
+        mNavItems.add(new NavItem("Oauth API Calls", "REST calls for NodeGrid authentication", true, null));
+        mNavItems.add(new NavItem("Generate token", null, false, "POST"));
+        mNavItems.add(new NavItem("", null, true, null));
+        mNavItems.add(new NavItem("App API Calls", "REST calls for NodeGrid App", true, null));
+        mNavItems.add(new NavItem("Store object", null, false, "POST"));
+        mNavItems.add(new NavItem("Retrieve objects", null, false, "GET"));
+        mNavItems.add(new NavItem("Retrieve object from ID", null, false, "GET"));
+        mNavItems.add(new NavItem("Advance querying", null, false, "GET"));
+        mNavItems.add(new NavItem("Delete object from ID", null, false, "DELETE"));
 
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -118,11 +116,65 @@ public class NavDrawerActivity extends Activity {
             listFinalTouchedView = view;
             view.setBackgroundColor(getResources().getColor(R.color.light_blue));*/
 
-            Fragment fragment = new methodGETFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.mainContent, fragment)
-                    .commit();
+            MethodPOSTFragment postFragment = new MethodPOSTFragment();;
+            MethodFragment getFragment = new MethodFragment();;
+
+            switch (position) {
+                case 0: case 6: case 9:
+                    // Title contents
+                    break;
+                case 1:
+                    getFragment.setEndPointUrl("/system/status");
+                    getFragment.setRequestMethod("GET");
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    getFragment.setEndPointUrl("/system/user");
+                    getFragment.setRequestMethod("GET");
+                    break;
+                case 4:
+                    getFragment.setEndPointUrl("/system/user");
+                    getFragment.setRequestMethod("DELETE");
+                    break;
+                case 5:case 8:
+                    // Space contents
+                    break;
+                case 7:
+                    break;
+                case 10:
+                    break;
+                case 11:
+                    getFragment.setEndPointUrl("/app");
+                    getFragment.setRequestMethod("GET");
+                    break;
+                case 12:
+                    getFragment.setEndPointUrl("/app");
+                    getFragment.setRequestMethod("GET");
+                    break;
+                case 13:
+                    getFragment.setEndPointUrl("/app");
+                    getFragment.setRequestMethod("GET");
+                    break;
+                case 14:
+                    getFragment.setEndPointUrl("/app");
+                    getFragment.setRequestMethod("DELETE");
+                    break;
+            }
+
+            if (mNavItems.get(position).getRequestMethod().equals("POST")) {
+                MethodPOSTFragment fragment = new MethodPOSTFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.mainContent, fragment)
+                        .commit();
+            } else {
+                MethodFragment fragment = new MethodFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.mainContent, fragment)
+                        .commit();
+            }
 
             mDrawerList.setItemChecked(position, true);
             setTitle(mNavItems.get(position).getMTitle());

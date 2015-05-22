@@ -8,14 +8,19 @@ import android.view.ViewGroup;
 
 import com.nodegrid.android.app.R;
 
+import java.util.Map;
+
 /**
  * Created by kwijewardana on 5/18/15.
  *
  * @author Kavimal Wijewardana <kavi707@gmail.com>
  */
-public class methodGETFragment extends Fragment {
+public class MethodFragment extends Fragment {
 
-    public methodGETFragment() {
+    private String endPointUrl;
+    private String requestMethod;
+
+    public MethodFragment() {
         // Required empty public constructor
     }
 
@@ -25,5 +30,13 @@ public class methodGETFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_get_method, container, false);
+    }
+
+    public void setEndPointUrl(String endPointUrl) {
+        this.endPointUrl = endPointUrl;
+    }
+
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
     }
 }
